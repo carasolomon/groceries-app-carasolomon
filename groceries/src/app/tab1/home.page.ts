@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, AlertController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
+import { GroceriesServiceService } from '../groceries-service.service';
+import { InputDialogService } from '../input-dialog.service';
 
 @Component({
   selector: 'app-home',
@@ -7,79 +9,39 @@ import { NavController, ToastController, AlertController } from '@ionic/angular'
   styleUrls: ['home.page.scss']
 })
 export class HomePage {
-// Item list with quantity of each
+  // Item list with quantity of each
   title = 'Grocery';
-  items = [
-    {
-      name: 'Cheese',
-      quantity: 3
-    },
-    {
-      name: 'Wine',
-      quantity: 2
-    },
-    {
-      name: 'Apples',
-      quantity: 7
-    },
-    {
-      name: 'Kale',
-      quantity: 3
-    },
-    {
-      name: 'Rice',
-      quantity: 1
-    },
-    {
-      name: 'Curry Mix',
-      quantity: 2
-    }
-  ];
 
-  constructor(public NavCtrl: NavController, public toastCtrl: ToastController, public alertController: AlertController) {}
-// Delete items from list
+  // tslint:disable-next-line: max-line-length
+  constructor(public toastCtrl: ToastController, public dataService: GroceriesServiceService, public inputDialogService: InputDialogService) { }
+
+  // Load items list
+  loadItems() {
+    return this.dataService.getItems();
+  }
+  // Delete items from list
   async deleteItem(item, index) {
     console.log('Deleting item - ', item, index);
     const toast = await this.toastCtrl.create({
       message: 'Deleting item - ' + index + '...',
-      duration: 5000
+      duration: 3000
     });
     toast.present();
-    this.items.splice(index, 1);
+    this.dataService.removeItem(index);
   }
-// Add items to list
-  async addItem() {
-    console.log('Adding an item');
-    const alert = await this.alertController.create({
-        header: 'Add Item',
-        message: 'Enter Item and Quantity...',
-        inputs: [
-          {
-            name: 'name',
-            placeholder: 'Name'
-          },
-          {
-            name: 'quantity',
-            placeholder: 'Quantity'
-          }
-        ],
-        buttons: [
-          {
-            text: 'Cancel',
-            role: 'cancel',
-            cssClass: 'secondary',
-            handler: () => {
-              console.log('Confirm Cancel');
-            }
-          }, {
-            text: 'Save',
-            handler: (item) => {
-              console.log('Saving item...', item);
-              this.items.push(item);
-            }
-          }
-        ]
-      });
-    await alert.present();
-    }
+
+  addItem() {
+    console.log('Adding item - ');
+    this.inputDialogService.showItem();
   }
+
+  async editItem(item, index) {
+    console.log('Editing item - ', item, index);
+    const toast = await this.toastCtrl.create({
+      message: 'Editing item - ' + index + '...',
+      duration: 3000
+    });
+    toast.present();
+    this.inputDialogService.showItem(item, index);
+  }
+}
