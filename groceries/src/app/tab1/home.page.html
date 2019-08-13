@@ -9,10 +9,10 @@
 <ion-content>
   <ion-card class="home-card">
     <ion-card-content>
-      <h3 text-center *ngIf="loadItems().length === 0">No items</h3>
+      <h3 text-center *ngIf="items.length === 0">No items</h3>
       <!-- List of Sliding Items -->
       <ion-list>
-        <ion-item-sliding *ngFor="let item of loadItems(); let i = index">
+        <ion-item-sliding *ngFor="let item of items; let i = index">
           <ion-item>
             <ion-label>{{item.name}}</ion-label>
             <ion-note slot="end">{{item.quantity}}</ion-note>

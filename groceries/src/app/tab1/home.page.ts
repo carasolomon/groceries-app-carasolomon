@@ -12,13 +12,25 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 export class HomePage {
   // Item list with quantity of each
   title = 'Grocery';
+  items = [];
+  errorMessage: string;
 
   // tslint:disable-next-line: max-line-length
-  constructor(public toastCtrl: ToastController, public dataService: GroceriesServiceService, public inputDialogService: InputDialogService, public socialSharing: SocialSharing) { }
-
+  constructor(public toastCtrl: ToastController, public dataService: GroceriesServiceService, public inputDialogService: InputDialogService, public socialSharing: SocialSharing) {
+    dataService.dataChanged$.subscribe((dataChanged: boolean) => {
+      this.loadItems();
+    });
+  }
   // Load items list
+  ionViewDidLoad() {
+    this.loadItems();
+  }
+
   loadItems() {
-    return this.dataService.getItems();
+    this.dataService.getItems().subscribe(
+      items => this.items = items,
+      // tslint:disable-next-line: no-angle-bracket-type-assertion
+      error => this.errorMessage = <any> error);
   }
   // Share items from list
   async shareItem(item, index) {
@@ -56,7 +68,6 @@ export class HomePage {
   }
 
   async editItem(item, index) {
-    console.log('Editing item - ', item, index);
     const toast = await this.toastCtrl.create({
       message: 'Editing item - ' + index + '...',
       duration: 3000
