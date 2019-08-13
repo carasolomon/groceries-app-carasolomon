@@ -51,7 +51,7 @@ export class GroceriesServiceService {
   }
   // remove items
   removeItem(id) {
-    this.http.delete(this.baseURL + '/api/groceries' + id).subscribe(res => {
+    this.http.delete(this.baseURL + '/api/groceries/' + id).subscribe(res => {
       this.items = res;
       this.dataChangeSubject.next(true);
      }
