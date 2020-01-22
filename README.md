@@ -1,5 +1,5 @@
-# week-2-groceries-app-skeleton-carasolomon
+# Grocery List Mobile App
 
-## Grocery App
+## Mobile App
 
 This app was created for a class assignment using Ionic Framework (Angular).
